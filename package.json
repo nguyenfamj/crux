@@ -22,8 +22,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "pnpm run format",
-      "turbo lint --fix"
+      "pnpm run format"
     ]
   },
   "husky": {
