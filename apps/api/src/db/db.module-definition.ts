@@ -6,6 +6,7 @@ export interface DatabaseOptions {
   user: string;
   password: string;
   database: string;
+  ssl: boolean;
 }
 export const CONNECTION_POOL = 'CONNECTION_POOL';
 
