@@ -5,7 +5,7 @@ const configService = new ConfigService();
 
 export default defineConfig({
   schema: './src/db/db.schema.ts',
-  out: './drizzle',
+  out: './migrations',
   dialect: 'postgresql',
   dbCredentials: {
     host: configService.get('POSTGRES_HOST'),
