@@ -1,8 +1,8 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DBModule } from '../../src/db/db.module';
+import { DbModule } from '../../src/db/db.module';
 
 export const getTestDbModule = (options: { sslEnabled?: boolean }) =>
-  DBModule.registerAsync({
+  DbModule.forRootAsync({
     imports: [ConfigModule.forRoot()],
     inject: [ConfigService],
     useFactory: (configService: ConfigService) => {

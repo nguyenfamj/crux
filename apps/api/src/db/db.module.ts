@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import {
   CONNECTION_POOL,
-  ConfigurableDatabaseModule,
-  DATABASE_OPTIONS,
+  ConfigurableDatabaseModuleClass,
+  DATABASE_OPTIONS_TOKEN,
   DatabaseOptions,
 } from './db.module-definition';
 import { Pool } from 'pg';
@@ -15,7 +15,7 @@ import { DrizzleService } from './drizzle.service';
     DrizzleService,
     {
       provide: CONNECTION_POOL,
-      inject: [DATABASE_OPTIONS],
+      inject: [DATABASE_OPTIONS_TOKEN],
       useFactory: (databaseOptions: DatabaseOptions) => {
         return new Pool({
           host: databaseOptions.host,
@@ -29,4 +29,4 @@ import { DrizzleService } from './drizzle.service';
     },
   ],
 })
-export class DBModule extends ConfigurableDatabaseModule {}
+export class DbModule extends ConfigurableDatabaseModuleClass {}
