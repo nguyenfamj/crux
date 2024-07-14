@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { eq, or } from 'drizzle-orm';
 import { databaseSchema } from '../db/db.schema';
 import { DrizzleService } from '../db/drizzle.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -31,11 +31,40 @@ export class UserService {
     return user;
   }
 
+  async findByEmail(email: string) {
+    const users = await this.drizzleService.db
+      .select()
+      .from(databaseSchema.users)
+      .where(eq(databaseSchema.users.email, email));
+
+    const user = users[0];
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
+  }
+
   async deleteById(id: number) {
     await this.drizzleService.db
       .delete(databaseSchema.users)
       .where(eq(databaseSchema.users.id, id));
 
     return true;
+  }
+
+  async alreadyExist(fields: { username: string; email: string }) {
+    const results = await this.drizzleService.db
+      .select({ id: databaseSchema.users.id })
+      .from(databaseSchema.users)
+      .where(
+        or(
+          eq(databaseSchema.users.username, fields.username),
+          eq(databaseSchema.users.email, fields.email),
+        ),
+      )
+      .limit(1);
+
+    return results.length > 0;
   }
 }

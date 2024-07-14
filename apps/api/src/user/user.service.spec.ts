@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { getTestDbModule } from '../../test/common/test-db-module';
-import { UserRole } from '../auth/role.enum';
+import { UserRole } from '../auth/enum/role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
   generateRandomEmail,
@@ -65,5 +65,23 @@ describe('UserService', () => {
     expect(foundUser.email).toEqual(userData.email);
     expect(foundUser.username).toEqual(userData.username);
     expect(foundUser.roles).toEqual(userData.roles);
+  });
+
+  it('should return true when check existing user', async () => {
+    const userData: CreateUserDto = {
+      email: generateRandomEmail(),
+      username: generateRandomUsername(),
+      password: 'hashed_password',
+      roles: UserRole.USER,
+    };
+    const createdUser = await service.create(userData);
+    createdUserId = createdUser.id;
+
+    const userExisted = await service.alreadyExist({
+      username: userData.username,
+      email: userData.email,
+    });
+
+    expect(userExisted).toEqual(true);
   });
 });
